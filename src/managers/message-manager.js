@@ -26,7 +26,7 @@ export async function showMessage(message) {
       return null;
     } else {
       var properties = resolveMessageProperies(message)
-      message.instanceId = uuidv4();
+      message.instanceId = "123";
       message.overlay = true;
       message.firstLoad = true;
       message.shouldResizeHeight = true;
@@ -124,7 +124,8 @@ function loadMessageComponent(message, elementId = null) {
     livePreview: false,
     properties: message.properties
   }
-  var url = `${settings.GIST_VIEW_ENDPOINT[Gist.config.env]}/index.html?options=${encodeUnicode(JSON.stringify(options))}`
+  //var url = `${settings.GIST_VIEW_ENDPOINT[Gist.config.env]}/index.html?options=${encodeUnicode(JSON.stringify(options))}`
+  var url = "http://localhost:8080/examples/message.html";
   window.addEventListener('message', handleGistEvents);
   window.addEventListener('touchstart', handleTouchStartEvents);
 

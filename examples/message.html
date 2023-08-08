@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Hello I'm Message</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta charset="utf-8" />
+    <link href="styles.css" rel="stylesheet">
+  </head>
+  <body onload="loaded()">
+    <!-- Start of editor injected HTML -->
+    <div id="banner"></div>
+    <div class="row header">
+      <h1>HTML In-App Message Test</h1>
+    </div>
+    <div class="row examples">
+      <a href="#" class="button" onClick="dismiss()">Dismiss</a>
+    </div>
+    <div class="row docs">
+      <p>I'm an in-app message built in HTML</p>
+    </div>
+    <!-- End of editor injected HTML -->
+    <script type="text/javascript">
+      function dismiss() {
+        postMessage("123", "tap", { "action": "gist://close" });
+      }
+
+      function loaded() {
+        postMessage("123", "bootstrapped", {});
+        postMessage("123", "routeLoaded", {"route": "welcome"});
+        postMessage("123", "sizeChanged", {"width": 400, "height": 300});
+      }
+
+      // SDK Bridge Code
+      function postMessage(instanceId, method, arguments) {
+        var message = {
+          "gist": {"instanceId": instanceId, "method": method, "parameters": arguments}
+        };
+        window.parent.postMessage(message, "*");
+      }
+    </script>
+  </body>
+</html>

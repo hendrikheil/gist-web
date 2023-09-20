@@ -1,15 +1,22 @@
 import { log } from "../utilities/log";
+import { getInboxMessagesForUser } from "./inbox-manager";
 
 export async function embedMessageInboxContainer() {
     document.body.insertAdjacentHTML('beforeend', "<div id='gist-message-inbox'></div>");
 }
 
-export async function addMessageInbox(messages) {
-    var element = safelyFetchElement("gist-message-inbox");
-    if (element) {
-        element.innerHTML = getInboxComponent(messages);
+export async function refreshMessageInbox() {
+    log("Refreshing message inbox.");
+    var messages = await getInboxMessagesForUser();
+    if (messages.length > 0) {
+        var element = safelyFetchElement("gist-message-inbox");
+        if (element) {
+            element.innerHTML = getInboxComponent(messages);
+        } else {
+            log(`Message inbox could not be embedded, elementId not found.`);
+        }
     } else {
-        log(`Message inbox could not be embedded, elementId not found.`);
+        log(`No messages in message inbox. not showing component.`);
     }
 }
 
@@ -66,7 +73,8 @@ function formatMessage(messages) {
 
 function fillRequired(message, template) {
     template = template.replace("${queueId}", message.queueId);
-    template = template.replace("${text}", message.text);
+    template = template.replace("${title}", message.title);
+    template = template.replace("${description}", message.description);
     if (message.cta) {
         template = template.replace("${cta}", message.cta);    
     } else {

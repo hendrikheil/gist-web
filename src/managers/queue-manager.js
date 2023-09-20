@@ -5,6 +5,7 @@ import { getUserQueue } from "../services/queue-service";
 import { showMessage, embedMessage } from "./message-manager";
 import { resolveMessageProperies } from "./gist-properties-manager";
 import { preloadRenderer } from "./message-component-manager";
+import { setInboxMessagesForUser } from './inbox-manager';
 
 const POLLING_DELAY_IN_SECONDS = 1000 * 10;
 var sleep = time => new Promise(resolve => setTimeout(resolve, time))
@@ -76,12 +77,14 @@ export async function pollMessageQueue() {
     if (Gist.isDocumentVisible) {
       var response = await getUserQueue();
       if (response && (response.status === 200 || response.status === 204)) {
-        log(`Message queue checked for user ${getUserToken()}, ${response.data.length} messages found.`);
-        if (response.data.length > 0) {
-          messages = response.data;
+        log(`Message queue checked for user ${getUserToken()}, ${response.data.messages.length} in-app messages and ${response.data.inbox.length} inbox messages found.`);
+        if (response.data.messages.length > 0 || response.data.inbox.length > 0) {
+          messages = response.data.messages;
+          await setInboxMessagesForUser(response.data.inbox);
           checkMessageQueue();
         } else {
           messages = [];
+          inbox = [];
           log(`No messages for user token.`);
         }
       } else {

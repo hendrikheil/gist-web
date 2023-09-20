@@ -1,7 +1,9 @@
-<a href="${cta}" onclick="Gist.markMessageAsRead('${queueId}')">
-    <div class="message">
-        <div class="message-body">
-            <div class="message-text">${text}</div>
-        </div>
+<div class="message">
+    <div class="message-body">
+        <div class="bin" onclick="Gist.markMessageAsRead('${queueId}')">&nbsp;</div>
+        <a href="${cta}">
+            <div class="message-title">${title}</div>
+            <div class="message-desc">${description}</div>
+        </a>
     </div>
-</a>
+</div>

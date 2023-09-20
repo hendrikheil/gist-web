@@ -16,6 +16,9 @@ export async function setInboxMessagesForUser(messages) {
 
 export async function getInboxMessagesForUser() {
   var messages = getKeyFromLocalStore(userTokenLocalStoreName);
+  if (messages === null) {
+    messages = [];
+  }
   log(`Fetched ${messages.length} inbox messages from local storage.`);
   return messages;
 }

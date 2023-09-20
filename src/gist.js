@@ -21,6 +21,7 @@ export default class {
     this.overlayInstanceId = null;
     this.currentRoute = null;
     this.isDocumentVisible = true;
+    this.isInboxOpen = false;
 
     log(`Setup complete on ${this.config.env} environment.`);
 
@@ -38,12 +39,8 @@ export default class {
       }
     }, false);
 
-    addEventListener('click', (t) => {
-      Gist.hideMessageInboxComponent();
-    }, true); 
-
     embedMessageInboxContainer();
-    refreshMessageInbox();
+    await refreshMessageInbox();
     /*
     var messages = [
       {

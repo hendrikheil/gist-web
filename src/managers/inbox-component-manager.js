@@ -1,5 +1,6 @@
 import { log } from "../utilities/log";
 import { getInboxMessagesForUser } from "./inbox-manager";
+import Gist from '../gist';
 
 export async function embedMessageInboxContainer() {
     document.body.insertAdjacentHTML('beforeend', "<div id='gist-message-inbox'></div>");
@@ -12,27 +13,44 @@ export async function refreshMessageInbox() {
         var element = safelyFetchElement("gist-message-inbox");
         if (element) {
             element.innerHTML = getInboxComponent(messages);
+            showMessageInboxBell();
+            if (Gist.isInboxOpen) {
+                showMessageInbox();
+            }
         } else {
             log(`Message inbox could not be embedded, elementId not found.`);
         }
     } else {
         log(`No messages in message inbox. not showing component.`);
+        if (Gist.isInboxOpen) {
+            hideMessageInbox();
+            hideMessageInboxBell();
+        }
     }
 }
 
 export async function showMessageInbox() {
     document.getElementById("gist-inbox-message-list").style.display = "block";
+    Gist.isInboxOpen = true;
 }
 
 export async function hideMessageInbox() {
     document.getElementById("gist-inbox-message-list").style.display = "none";
+    Gist.isInboxOpen = false;
+}
+
+export async function hideMessageInboxBell() {
+    document.getElementById("gist-inbox-component").style.display = "none";
+}
+
+export async function showMessageInboxBell() {
+    document.getElementById("gist-inbox-component").style.display = "flex";
 }
 
 function getInboxComponent(messages) {
     var template = require("html-loader!../templates/inbox.html");
     var renderedMessages = formatMessage(messages);
     template = template.replace("${messages}", renderedMessages.join(""));
-    console.log(renderedMessages);
     return template;
 }
 

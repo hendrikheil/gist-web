@@ -7,7 +7,6 @@ const userTokenLocalStoreName = "gist.web.inboxMessages";
 
 export async function setInboxMessagesForUser(messages) {
   log(`Storing ${messages.length} inbox messages to local storage.`);
-
   var expiryDate = new Date();
   expiryDate.setDate(expiryDate.getDate() + 1);
   setKeyWithExpiryToLocalStore(userTokenLocalStoreName, messages, expiryDate);

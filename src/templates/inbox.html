@@ -36,10 +36,13 @@
         max-width: 340px;
         border: 1px solid #dcdcdc;
         box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-        max-height: 500px;
-        overflow-x: auto;
         border-radius: 8px;
         z-index: 99999999999;
+      }
+
+      #gist-inbox-message-list .message-list {
+        overflow-x: auto;
+        max-height: 500px;
       }
 
       #gist-inbox-message-list a {
@@ -145,6 +148,8 @@
         <div>Notifications</div>
         <div class="close" onclick="Gist.hideMessageInboxComponent()"><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgZmlsbD0ibm9uZSIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiB3aWR0aD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTYuMjI1MyA0LjgxMTA4QzUuODM0NzcgNC40MjA1NiA1LjIwMTYxIDQuNDIwNTYgNC44MTEwOCA0LjgxMTA4QzQuNDIwNTYgNS4yMDE2MSA0LjQyMDU2IDUuODM0NzcgNC44MTEwOCA2LjIyNTNMMTAuNTg1OCAxMkw0LjgxMTE0IDE3Ljc3NDdDNC40MjA2MiAxOC4xNjUyIDQuNDIwNjIgMTguNzk4NCA0LjgxMTE0IDE5LjE4ODlDNS4yMDE2NyAxOS41Nzk0IDUuODM0ODMgMTkuNTc5NCA2LjIyNTM1IDE5LjE4ODlMMTIgMTMuNDE0MkwxNy43NzQ3IDE5LjE4ODlDMTguMTY1MiAxOS41Nzk0IDE4Ljc5ODQgMTkuNTc5NCAxOS4xODg5IDE5LjE4ODlDMTkuNTc5NCAxOC43OTg0IDE5LjU3OTQgMTguMTY1MiAxOS4xODg5IDE3Ljc3NDdMMTMuNDE0MiAxMkwxOS4xODkgNi4yMjUzQzE5LjU3OTUgNS44MzQ3NyAxOS41Nzk1IDUuMjAxNjEgMTkuMTg5IDQuODExMDhDMTguNzk4NSA0LjQyMDU2IDE4LjE2NTMgNC40MjA1NiAxNy43NzQ4IDQuODExMDhMMTIgMTAuNTg1OEw2LjIyNTMgNC44MTEwOFoiIGZpbGw9ImN1cnJlbnRDb2xvciIvPjwvc3ZnPg==" /></div>
       </div>
-      ${messages}
+      <div class="message-list">
+        ${messages}
+      </div>
     </div>
 </div>

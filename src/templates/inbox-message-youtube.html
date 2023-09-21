@@ -1,12 +1,12 @@
 <div class="message">
     <div class="message-body">
-        <div class="bin" onclick="Gist.markMessageAsRead('${queueId}')">&nbsp;</div>
+        <div class="bin" onclick="Gist.markInboxMessageAsRead('{queueId}')">&nbsp;</div>
         <div class="message-image">
-            <iframe src="${media}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            <iframe src="{media}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
         </div>
-        <a href="${cta}">
-            <div class="message-title">${title}</div>
-            <div class="message-desc">${description}</div>
+        <a href="#" onclick="Gist.performInboxMessageAction('{queueId}', '{cta}')">
+            <div class="message-title">{title}</div>
+            <div class="message-desc">{description}</div>
         </a>
     </div>
 </div>

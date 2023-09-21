@@ -6,6 +6,7 @@ import { showMessage, embedMessage } from "./message-manager";
 import { resolveMessageProperies } from "./gist-properties-manager";
 import { preloadRenderer } from "./message-component-manager";
 import { setInboxMessagesForUser } from './inbox-manager';
+import { v4 as uuidv4 } from 'uuid';
 
 const POLLING_DELAY_IN_SECONDS = 1000 * 10;
 var sleep = time => new Promise(resolve => setTimeout(resolve, time))
@@ -80,7 +81,7 @@ export async function pollMessageQueue() {
         log(`Message queue checked for user ${getUserToken()}, ${response.data.messages.length} in-app messages and ${response.data.inbox.length} inbox messages found.`);
         if (response.data.messages.length > 0 || response.data.inbox.length > 0) {
           messages = response.data.messages;
-          await setInboxMessagesForUser(response.data.inbox);
+          prepareInboxMessageForLocalStore(response.data.inbox);
           checkMessageQueue();
         } else {
           messages = [];
@@ -100,4 +101,14 @@ export async function pollMessageQueue() {
   } else {
     log(`User token reset, skipping queue check.`);
   }
+}
+
+async function prepareInboxMessageForLocalStore(inboxMessages) {
+  inboxMessages.forEach(message => {
+    message.type = "inbox";
+    message.instanceId = uuidv4();
+    message.messageId = "inbox";
+    message.currentRoute = "";
+  });
+  await setInboxMessagesForUser(inboxMessages);
 }

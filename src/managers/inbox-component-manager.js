@@ -32,6 +32,11 @@ export async function refreshMessageInbox() {
 export async function showMessageInbox() {
     document.getElementById("gist-inbox-message-list").style.display = "block";
     Gist.isInboxOpen = true;
+
+    var messages = await getInboxMessagesForUser();
+    messages.forEach(message => {
+        Gist.messageShown(message);
+    });
 }
 
 export async function hideMessageInbox() {
@@ -69,14 +74,16 @@ function formatMessage(messages) {
         }
         if (message.media) {
             if (message.media.indexOf("youtube.com/") > -1) {
+                var url = message.media.split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+                var id = (url[2] !== undefined) ? url[2].split(/[^0-9a-z_\-]/i)[0] : url[0];
                 var template = require("html-loader!../templates/inbox-message-youtube.html");
                 template = fillRequired(message, template);
-                template = template.replace("${media}", message.media);
+                template = template.replace("{media}", "https://www.youtube.com/embed/" + id);
                 renderedMessages.push(template);
             } else {
                 var template = require("html-loader!../templates/inbox-message-image.html");
                 template = fillRequired(message, template);
-                template = template.replace("${media}", message.media);
+                template = template.replace("{media}", message.media);
                 renderedMessages.push(template);
             }
         } else {
@@ -90,13 +97,13 @@ function formatMessage(messages) {
 }
 
 function fillRequired(message, template) {
-    template = template.replace("${queueId}", message.queueId);
-    template = template.replace("${title}", message.title);
-    template = template.replace("${description}", message.description);
-    if (message.cta) {
-        template = template.replace("${cta}", message.cta);    
+    template = template.replace(/{queueId}/g, message.queueId);
+    template = template.replace(/{title}/g, message.title);
+    template = template.replace(/{description}/g, message.description);
+    if (message.cta == null) {
+        template = template.replace(/{cta}/g, "");
     } else {
-        template = template.replace("${cta}", "#");
+        template = template.replace(/{cta}/g, message.cta);
     }
     return template;
 }
@@ -104,13 +111,13 @@ function fillRequired(message, template) {
 // To Refactor
 function safelyFetchElement(elementId) {
     try {
-      var element = document.querySelector(`#${elementId}`);
-      if (element) {
+        var element = document.querySelector(`#${elementId}`);
+        if (element) {
         return element;
-      } else {
+        } else {
         return null;
-      }
+        }
     } catch {
-      return null;
+        return null;
     }
-  }
+}

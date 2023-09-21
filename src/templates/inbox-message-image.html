@@ -1,12 +1,12 @@
 <div class="message">
     <div class="message-body">
-        <div class="bin" onclick="Gist.markMessageAsRead('${queueId}')">&nbsp;</div>
+        <div class="bin" onclick="Gist.markInboxMessageAsRead('{queueId}')">&nbsp;</div>
         <div class="message-image">
-            <img src="${media}" />
+            <img src="{media}" />
         </div>
-        <a href="${cta}">
-            <div class="message-title">${title}</div>
-            <div class="message-desc">${description}</div>
+        <a href="#" onclick="Gist.performInboxMessageAction('{queueId}', '{cta}')">
+            <div class="message-title">{title}</div>
+            <div class="message-desc">{description}</div>
         </a>
     </div>
 </div>

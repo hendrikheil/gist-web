@@ -23,9 +23,17 @@ export async function getInboxMessagesForUser() {
   return messages;
 }
 
+export function getInboxMessageByQueueId(queueId) {
+  var messages = getKeyFromLocalStore(userTokenLocalStoreName);
+  if (messages === null) {
+    return {};
+  }
+  var message = messages.find(function(el) { return el.queueId == queueId; });
+  return message;
+}
+
 export async function clearInboxMessagesForUser() {
   clearKeyFromLocalStore(userTokenLocalStoreName);
-
   refreshMessageInbox();
 }
 

@@ -4,7 +4,7 @@ import { startQueueListener, checkMessageQueue } from "./managers/queue-manager"
 import { setUserToken, clearUserToken, useGuestSession } from "./managers/user-manager";
 import { showMessage, embedMessage, hideMessage, removePersistentMessage } from "./managers/message-manager";
 import { embedMessageInboxContainer, refreshMessageInbox, showMessageInbox, hideMessageInbox } from "./managers/inbox-component-manager";
-import { markInboxMessageAsRead } from "./managers/inbox-manager";
+import { markInboxMessageAsRead, getInboxMessageByQueueId } from "./managers/inbox-manager";
 
 export default class {
   static async setup(config) {
@@ -138,9 +138,20 @@ export default class {
     hideMessageInbox();
   }
 
-  static markMessageAsRead(queueId) {
+  static markInboxMessageAsRead(queueId) {
     log(`Marking message with queueId ${queueId} as read.`);
+    var message = getInboxMessageByQueueId(queueId);
     markInboxMessageAsRead(queueId);
+    Gist.messageAction(message, "gist://close", "Remove");
+    Gist.messageDismissed(message);
+  }
+
+  static performInboxMessageAction(queueId, action) {
+    if (action === "") { return; }
+    log(`Performing CTA action: ${action}.`);
+    var message = getInboxMessageByQueueId(queueId);
+    Gist.messageAction(message, action, "CTA");
+    window.location.href = action;
   }
 
 }

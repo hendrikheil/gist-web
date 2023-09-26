@@ -15,14 +15,15 @@ export default class {
       dataCenter: config.dataCenter,
       env: config.env === undefined ? "prod" : config.env,
       logging: config.logging === undefined ? false : config.logging,
-      experiments: config.experiments === undefined ? false : config.experiments
+      experiments: config.experiments === undefined ? false : config.experiments,
+      inboxElementId: config.inboxElementId === undefined ? "gist-inbox-component" : config.inboxElementId
     }
     this.currentMessages = [];
     this.overlayInstanceId = null;
     this.currentRoute = null;
     this.isDocumentVisible = true;
     this.isInboxOpen = false;
-
+    
     log(`Setup complete on ${this.config.env} environment.`);
 
     if (this.config.useGuestSession) {
@@ -41,32 +42,8 @@ export default class {
 
     embedMessageInboxContainer();
     await refreshMessageInbox();
-    /*
-    var messages = [
-      {
-        queueId: "a9a3dfb2-c9d3-4c85-a1b3-6f2f9f86811e",
-        priority: 2,
-        media: "https://customer.io/docs/images/release-notes/in-app-drag-and-drop.gif",
-        title: "Reorganize in-app messages with drag-and-drop",
-        description: "We’ve made it even easier to build in-app messages. You can now can drag-and-and drop components within the in-app message editor.",
-        cta: "https://customer.io/docs/release-notes/#2023-09-11-in-app-drag-and-drop"
-      },
-      {
-          queueId: "fbbfb0c8-3b37-4881-a28c-15a1bf341015",
-          priority: 1,
-          media: "https://www.youtube.com/embed/eLgW_lAwOC8",
-          title: "Reduce Spam Rates & Grow Engagement with Kickbox",
-          description: "Check out our new workshop to reduce spam rates & grow engagement using Kickbox.",
-      },
-      {
-          queueId: "ac6b1375-2140-4846-b9f2-a6282abf4654",
-          priority: 3,
-          title: "Metrics for subscription preferences",
-          description: "You can now view unsubscribe rates for subscription center topics when viewing Performance & Delivery Metrics or Message Metrics for campaigns and API-triggered broadcasts within the Metrics tab.",
-          cta: "https://customer.io/docs/journeys/subscription-center/#metrics-for-subscription-preferences"
-      }
-    ];
-    */
+    
+    document.getElementById(this.config.inboxElementId).addEventListener("click", Gist.showMessageInboxOnElement);
   }
 
   static async setCurrentRoute(route) {
@@ -130,8 +107,26 @@ export default class {
 
   // Gist Message Inbox Methods
 
-  static showMessageInboxComponent() {
+  static showMessageInboxOnElement() {
     showMessageInbox();
+    var element = document.getElementById(Gist.config.inboxElementId);
+    var elemRect = element.getBoundingClientRect(); 
+    var bodyRect = document.body.getBoundingClientRect();
+    var inboxDiv = document.getElementById("gist-inbox-message-list");
+    var offset = elemRect.top - bodyRect.top;
+    var left = elemRect.left;
+    if ((elemRect.left + inboxDiv.offsetWidth + 340) > window.innerWidth) {
+      left = window.innerWidth - 340;
+    }
+
+    if ((offset + inboxDiv.clientHeight) > window.innerHeight) {
+      inboxDiv.style.bottom = "20px";
+      inboxDiv.style.top = "";
+    } else {
+      inboxDiv.style.bottom = "";
+      inboxDiv.style.top = (offset + elemRect.height + 10)+"px";
+    }
+    inboxDiv.style.left = left+"px";
   }
 
   static hideMessageInboxComponent() {

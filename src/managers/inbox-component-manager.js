@@ -3,7 +3,7 @@ import { getInboxMessagesForUser } from "./inbox-manager";
 import Gist from '../gist';
 
 export async function embedMessageInboxContainer() {
-    document.body.insertAdjacentHTML('beforeend', "<div id='gist-message-inbox'></div>");
+    document.body.insertAdjacentHTML('afterbegin', "<div id='gist-message-inbox'></div>");
 }
 
 export async function refreshMessageInbox() {
@@ -13,9 +13,12 @@ export async function refreshMessageInbox() {
         var element = safelyFetchElement("gist-message-inbox");
         if (element) {
             element.innerHTML = getInboxComponent(messages);
-            showMessageInboxBell();
+            if (Gist.config.inboxElementId === "gist-inbox-component") {
+                showMessageInboxBell()
+                document.getElementById(Gist.config.inboxElementId).addEventListener("click", Gist.showMessageInboxOnElement);
+            }
             if (Gist.isInboxOpen) {
-                showMessageInbox();
+                Gist.showMessageInboxOnElement();
             }
         } else {
             log(`Message inbox could not be embedded, elementId not found.`);

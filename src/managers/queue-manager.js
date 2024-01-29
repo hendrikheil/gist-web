@@ -8,7 +8,7 @@ import { preloadRenderer } from "./message-component-manager";
 import { setKeyWithExpiryToLocalStore, getKeyFromLocalStore } from '../utilities/local-storage';
 
 const userQueueLocalStoreName = "gist.web.userQueue";
-const POLLING_DELAY_IN_SECONDS = 1000 * 10;
+const POLLING_DELAY_IN_SECONDS = 1000 * 60;
 var sleep = time => new Promise(resolve => setTimeout(resolve, time))
 var poll = (promiseFn, time) => promiseFn().then(sleep(time).then(() => poll(promiseFn, time)));
 var pollingSetup = false;

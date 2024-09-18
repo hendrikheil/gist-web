@@ -102,22 +102,17 @@ export function loadOverlayComponent(url, message, options) {
 }
 
 function attachIframeLoadEvent(elementId, options) {
-  console.log('Attaching iframe load event');
   const iframe = document.getElementById(elementId);
   if (iframe) {
-      console.log('iframe found');
       iframe.onload = function() {
-          console.log('iframe loaded');
           sendOptionsToIframe(elementId, options); // Send the options when iframe loads
       };
   }
 }
 
 function sendOptionsToIframe(iframeId, options) {
-  console.log('Sending options to iframe:', options);
   const iframe = document.getElementById(iframeId);
   if (iframe && iframe.contentWindow) {
-      console.log('Sending options to iframe:', options);
       iframe.contentWindow.postMessage({ options: options }, '*');
   }
 }
